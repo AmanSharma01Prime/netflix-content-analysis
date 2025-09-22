@@ -1,2 +1,3 @@
-# netflix-content-analysis
-netflix content analysis is a data analysis project using python in google colab, sql in postgreSQL and visualization in google sheets.
+# Netflix Movies and TV Shows Content Analysis using Python, SQL, Sheets
+
+[!link](https://github.com/AmanSharma01Prime/netflix-content-analysis/blob/main/netflix-logo-in-clouds-2.jpeg)
