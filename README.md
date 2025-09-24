@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS netflix;
 CREATE TABLE netflix
 (
     show_id      VARCHAR(5),
-    type         VARCHAR(10),
+    show_type    VARCHAR(10),
     title        VARCHAR(250),
     director     VARCHAR(550),
     casts        VARCHAR(1050),
@@ -45,25 +45,26 @@ CREATE TABLE netflix
 ```
 
 ## Business Problems and Solutions
-
+<!--
 ### Section 1 – Dataset Overview
-*Purpose: Introduce dataset and basic exploration.*
+*Purpose: Introduce dataset and basic exploration.*  
+*SQL Concepts:* `COUNT`, `GROUP BY`
+*SQL Concepts:* `WHERE`, `LIKE`, filtering
+-->
 
-#### 1. Movies vs TV Shows
-**Description:** Count how many Movies vs TV Shows are in the dataset.  
-**SQL Concepts / Tags:** `COUNT`, `GROUP BY`
+### 1. Count the Number of Movies vs TV Shows in the dataset.
 
 ```sql
 SELECT 
-    type,
+    show_type,
     COUNT(*)
 FROM netflix
-GROUP BY 1;
+GROUP BY show_type;
 ```
 
-**Objective:** Determine the distribution of content types on Netflix.
+> **Objective:** Determine the distribution of content types on Netflix.  
 
-### 2. Find the Most Common Rating for Movies and TV Shows
+### 2. List all Movies that are categorized as Documentaries.
 
 ```sql
 WITH RatingCounts AS (
@@ -89,9 +90,10 @@ FROM RankedRatings
 WHERE rank = 1;
 ```
 
-**Objective:** Identify the most frequently occurring rating for each type of content.
+> **Objective:** Identify the most frequently occurring rating for each type of content.  
 
-### 3. List All Movies Released in a Specific Year (e.g., 2020)
+
+### 3. Find all titles where the description contains the word “love”.
 
 ```sql
 SELECT * 
@@ -99,9 +101,10 @@ FROM netflix
 WHERE release_year = 2020;
 ```
 
-**Objective:** Retrieve all movies released in a specific year.
+> **Objective:** Retrieve all movies released in a specific year.
 
-### 4. Find the Top 5 Countries with the Most Content on Netflix
+
+### 4. Find the oldest title(s) available by release year.
 
 ```sql
 SELECT * 
@@ -118,9 +121,9 @@ ORDER BY total_content DESC
 LIMIT 5;
 ```
 
-**Objective:** Identify the top 5 countries with the highest number of content items.
+> **Objective:** Identify the top 5 countries with the highest number of content items.
 
-### 5. Identify the Longest Movie
+### 5. Count the number of titles under each genre.
 
 ```sql
 SELECT 
@@ -130,9 +133,9 @@ WHERE type = 'Movie'
 ORDER BY SPLIT_PART(duration, ' ', 1)::INT DESC;
 ```
 
-**Objective:** Find the movie with the longest duration.
+> **Objective:** Count the number of content items in each genre.
 
-### 6. Find Content Added in the Last 5 Years
+### 6. Find the most common rating for Movies and TV Shows.
 
 ```sql
 SELECT *
@@ -140,7 +143,7 @@ FROM netflix
 WHERE TO_DATE(date_added, 'Month DD, YYYY') >= CURRENT_DATE - INTERVAL '5 years';
 ```
 
-**Objective:** Retrieve content added to Netflix in the last 5 years.
+> **Objective:** Retrieve content added to Netflix in the last 5 years.
 
 ### 7. Find All Movies/TV Shows by Director 'Rajiv Chilaka'
 
@@ -155,9 +158,9 @@ FROM (
 WHERE director_name = 'Rajiv Chilaka';
 ```
 
-**Objective:** List all content directed by 'Rajiv Chilaka'.
+> **Objective:** List all content directed by 'Rajiv Chilaka'.
 
-### 8. List All TV Shows with More Than 5 Seasons
+### 8. Identify countries producing the highest number of Netflix titles
 
 ```sql
 SELECT *
@@ -166,9 +169,9 @@ WHERE type = 'TV Show'
   AND SPLIT_PART(duration, ' ', 1)::INT > 5;
 ```
 
-**Objective:** Identify TV shows with more than 5 seasons.
+> **Objective:** Identify TV shows with more than 5 seasons.
 
-### 9. Count the Number of Content Items in Each Genre
+### 9. Find directors with the highest number of titles.
 
 ```sql
 SELECT 
@@ -178,7 +181,7 @@ FROM netflix
 GROUP BY 1;
 ```
 
-**Objective:** Count the number of content items in each genre.
+> **Objective:** Count the number of content items in each genre.
 
 ### 10.Find each year and the average numbers of content release in India on netflix. 
 return top 5 year with highest avg content release!
@@ -199,9 +202,9 @@ ORDER BY avg_release DESC
 LIMIT 5;
 ```
 
-**Objective:** Calculate and rank years by the average number of content releases by India.
+> **Objective:** Calculate and rank years by the average number of content releases by India.
 
-### 11. List All Movies that are Documentaries
+### 11. Identify the longest duration movie and the TV show with the most seasons.
 
 ```sql
 SELECT * 
@@ -209,7 +212,7 @@ FROM netflix
 WHERE listed_in LIKE '%Documentaries';
 ```
 
-**Objective:** Retrieve all movies classified as documentaries.
+> **Objective:** Retrieve all movies classified as documentaries.
 
 ### 12. Find All Content Without a Director
 
@@ -219,7 +222,7 @@ FROM netflix
 WHERE director IS NULL;
 ```
 
-**Objective:** List content that does not have a director.
+> **Objective:** List content that does not have a director.
 
 ### 13. Find How Many Movies Actor 'Salman Khan' Appeared in the Last 10 Years
 
@@ -230,7 +233,7 @@ WHERE casts LIKE '%Salman Khan%'
   AND release_year > EXTRACT(YEAR FROM CURRENT_DATE) - 10;
 ```
 
-**Objective:** Count the number of movies featuring 'Salman Khan' in the last 10 years.
+> **Objective:** Count the number of movies featuring 'Salman Khan' in the last 10 years.
 
 ### 14. Find the Top 10 Actors Who Have Appeared in the Highest Number of Movies Produced in India
 
@@ -245,9 +248,9 @@ ORDER BY COUNT(*) DESC
 LIMIT 10;
 ```
 
-**Objective:** Identify the top 10 actors with the most appearances in Indian-produced movies.
+> **Objective:** Identify the top 10 actors with the most appearances in Indian-produced movies.
 
-### 15. Categorize Content Based on the Presence of 'Kill' and 'Violence' Keywords
+### 15. Categorize content as “Bad” if the description contains keywords like “kill” or “violence” otherwise label as “Good” and count each group.
 
 ```sql
 SELECT 
@@ -264,7 +267,7 @@ FROM (
 GROUP BY category;
 ```
 
-**Objective:** Categorize content as 'Bad' if it contains 'kill' or 'violence' and 'Good' otherwise. Count the number of items in each category.
+> **Objective:** Categorize content as 'Bad' if it contains 'kill' or 'violence' and 'Good' otherwise. Count the number of items in each category.
 
 ## Findings and Conclusion
 
@@ -291,105 +294,3 @@ For more content on SQL, data analysis, and other data-related topics, make sure
 - **Discord**: [Join our community to learn and grow together](https://discord.gg/36h5f2Z5PK)
 
 Thank you for your support, and I look forward to connecting with you!
-
-
-
-
-
-
-
-
-
-
-
-
-
-========================================================================================================
-## Objective
-
-- find total number of movies and tv shows on netflix
-- find which country has most movies on netflix
-- find most watched content on netflix acc to country
-
-## Netflix Dataset – 15 SQL Problems
-
-### Section 1 – Dataset Overview (Basic Intro)
-
-Purpose: Introduce dataset and basic exploration.
-
-1. Movies vs TV Shows – Count how many Movies vs TV Shows are in the dataset.
-
-SQL Skills: COUNT, GROUP BY
-
-
-2. Titles with “love” in Description – Find all titles where the description contains the word “love”.
-
-SQL Skills: LIKE, text search
-
-3. Movies that are Documentaries – List all Movies categorized as Documentaries.
-
-SQL Skills: WHERE, LIKE, filtering
-
-4. Oldest Release Year Titles – Find the oldest release year title(s) available.
-
-SQL Skills: MIN(), filtering, ORDER BY
-
-### Section 2 – Descriptive Insights (Distribution & Top Entities)
-
-Purpose: Identify patterns in content types, genres, actors, and directors.
-
-5. Genre / Category Distribution – Count the number of titles under each genre/category in listed_in.
-
-SQL Skills: COUNT, GROUP BY
-
-6. Top 5 Genres by Number of Titles – Identify which genres have the most content.
-
-SQL Skills: COUNT, GROUP BY, ORDER BY, LIMIT
-
-7. Most Common Ratings – Find the most frequent rating for Movies and TV Shows.
-
-SQL Skills: COUNT, GROUP BY, ORDER BY, LIMIT
-
-8. Top 5 Directors – Find directors with the highest number of titles.
-
-SQL Skills: COUNT, GROUP BY, ORDER BY, LIMIT
-
-9. Top 10 Actors (Global) – Identify actors who appear most frequently in Netflix titles.
-
-SQL Skills: COUNT, GROUP BY, ORDER BY, LIMIT, text parsing if multiple actors in one field
-
-10. Director Spotlight – Fun Query – List all titles by a popular/fun director (e.g., David Dhawan).
-
-SQL Skills: WHERE, filtering, LIKE
-
-### Section 3 – Trend & Market Analysis
-
-Purpose: Analyze time trends and geographical insights.
-
-Content Growth Trend (Yearly) – Show how many titles were added to Netflix each year.
-
-SQL Skills: EXTRACT(YEAR FROM date_added), COUNT, GROUP BY, ORDER BY
-
-Trend in Indian Releases – Find each year’s average number of content releases in India; return top 5 years.
-
-SQL Skills: AVG(), GROUP BY, ORDER BY, filtering
-
-Top 5 Countries with Most Titles – Identify countries producing the highest number of Netflix titles.
-
-SQL Skills: COUNT, GROUP BY, ORDER BY, LIMIT
-
-### Section 4 – Deeper Business & Data Insights
-
-Purpose: Highlight advanced/insightful queries and actionable analysis.
-
-Longest Movie & TV Show with Highest Seasons – Identify the longest duration movie and the TV show with the most seasons.
-
-SQL Skills: MAX(), filtering, ORDER BY, conditional logic
-
-Content Risk Categorization – Classify content as “Bad” if description contains keywords like “kill” or “violence”, otherwise “Good”, then count.
-
-SQL Skills: CASE WHEN, LIKE, COUNT, text search
-
-Titles Without Directors (Data Quality Check) – Find all titles missing director information.
-
-SQL Skills: IS NULL, filtering
