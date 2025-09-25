@@ -26,31 +26,28 @@ The data for this project is sourced from the Kaggle dataset:
 ## Schema
 
 ```sql
-DROP TABLE IF EXISTS netflix;
+
 CREATE TABLE netflix
 (
-    show_id      VARCHAR(5),
-    show_type    VARCHAR(10),
-    title        VARCHAR(250),
-    director     VARCHAR(550),
-    casts        VARCHAR(1050),
-    country      VARCHAR(550),
-    date_added   VARCHAR(55),
-    release_year INT,
-    rating       VARCHAR(15),
-    duration     VARCHAR(15),
-    listed_in    VARCHAR(250),
-    description  VARCHAR(550)
+		show_id			   VARCHAR(10),
+		show_type		   VARCHAR(10),
+		title			     VARCHAR(150),
+		director		   VARCHAR(250),
+		casts			     VARCHAR(800),
+		country			   VARCHAR(150),
+		date_added		 DATE,
+		release_year	 INT,	
+		rating			   VARCHAR(10),
+		duration		   VARCHAR(15),
+		listed_in		   VARCHAR(100),
+		description		 VARCHAR(300),
+		duration_num	 INT,
+		duration_type	 VARCHAR(10),
+		year_added		 INT
 );
 ```
 
 ## Business Problems and Solutions
-<!--
-### Section 1 – Dataset Overview
-*Purpose: Introduce dataset and basic exploration.*  
-*SQL Concepts:* `COUNT`, `GROUP BY`
-*SQL Concepts:* `WHERE`, `LIKE`, filtering
--->
 
 ### 1. Count the Number of Movies vs TV Shows in the dataset.
 
