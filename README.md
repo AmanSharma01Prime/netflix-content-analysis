@@ -3,7 +3,7 @@
 <!-- ![netflix logo](https://github.com/AmanSharma01Prime/netflix-content-analysis/blob/main/netflix-logo-in-clouds-2.jpeg)  -->
 
 <p align="center">
-  <img src="https://github.com/AmanSharma01Prime/netflix-content-analysis/blob/main/chatgpt-image-aug-8-2025-at-10_21_51-am-3.jpeg" alt="Banner" width="600" height="350"/>
+  <img src="https://github.com/AmanSharma01Prime/netflix-content-analysis/blob/main/logo.jpeg" alt="Banner" width="600" height="350"/>
 </p>
 
 
