@@ -1,21 +1,22 @@
-# Netflix Content Analysis using Python, SQL and Sheets
+# Netflix Content Analysis Using SQL, Python (Pandas/Colab), and Google Sheets
 
 <!-- ![netflix logo](https://github.com/AmanSharma01Prime/netflix-content-analysis/blob/main/netflix-logo-in-clouds-2.jpeg)  -->
 
 <p align="center">
-  <img src="https://github.com/AmanSharma01Prime/netflix-content-analysis/blob/main/netflix-logo.jpeg" alt="Banner" width="900" height="450"/>
+  <img src="https://github.com/AmanSharma01Prime/netflix-content-analysis/blob/main/chatgpt-image-aug-8-2025-at-10_21_51-am-3.jpeg" alt="Banner" width="600" height="350"/>
 </p>
 
 
 ## Overview
-This project involves a comprehensive analysis of Netflix's movies and TV shows data using SQL. The goal is to extract valuable insights and answer various business questions based on the dataset. The following README provides a detailed account of the project's objectives, business problems, solutions, findings, and conclusions.
+This project analyzes Netflix’s content catalog using SQL to extract business insights. It covers content trends, genre and country analysis, top contributors (directors/actors), and keyword-based thematic exploration. The goal is to showcase SQL skills relevant to data analyst roles while generating actionable insights from real-world data.
 
 ## Objectives
 
-- Analyze the distribution of content types (movies vs TV shows).
-- Identify the most common ratings for movies and TV shows.
-- List and analyze content based on release years, countries, and durations.
-- Explore and categorize content based on specific criteria and keywords.
+- Explore content distribution across types, genres, countries, and time periods.
+- Identify trends in content additions and user-targeted characteristics (ratings, duration).
+- Highlight top-performing contributors (directors, actors).
+- Analyze content themes and regional preferences to support business decision-making.
+- Generate insights ready for visualization or further analysis in Google Sheets.
 
 ## Dataset
 
@@ -31,19 +32,19 @@ CREATE TABLE netflix
 (
 		show_id			   VARCHAR(10),
 		show_type		   VARCHAR(10),
-		title			     VARCHAR(150),
+		title			   VARCHAR(150),
 		director		   VARCHAR(250),
-		casts			     VARCHAR(800),
+		casts			   VARCHAR(800),
 		country			   VARCHAR(150),
-		date_added		 DATE,
-		release_year	 INT,	
+		date_added		   DATE,
+		release_year	   INT,	
 		rating			   VARCHAR(10),
 		duration		   VARCHAR(15),
 		listed_in		   VARCHAR(100),
-		description		 VARCHAR(300),
-		duration_num	 INT,
-		duration_type	 VARCHAR(10),
-		year_added		 INT
+		description		   VARCHAR(300),
+		duration_num	   INT,
+		duration_type	   VARCHAR(10),
+		year_added		   INT
 );
 ```
 
@@ -53,241 +54,330 @@ CREATE TABLE netflix
 
 ```sql
 SELECT 
-    show_type,
-    COUNT(*)
+	show_type, 
+	COUNT(*) AS num_of_titles
 FROM netflix
-GROUP BY show_type;
+GROUP BY show_type
 ```
 
-> **Objective:** Determine the distribution of content types on Netflix.  
+> **Objective:** Determine the distribution of content types on Netflix to understand platform composition. 
 
-### 2. List all Movies that are categorized as Documentaries.
+### 2. Trend of documentary added on netflix per year.
 
 ```sql
-WITH RatingCounts AS (
-    SELECT 
-        type,
-        rating,
-        COUNT(*) AS rating_count
-    FROM netflix
-    GROUP BY type, rating
-),
-RankedRatings AS (
-    SELECT 
-        type,
-        rating,
-        rating_count,
-        RANK() OVER (PARTITION BY type ORDER BY rating_count DESC) AS rank
-    FROM RatingCounts
-)
+SELECT year_added, count(*) as Documentaries_count FROM
+(
+	SELECT
+	*,
+	TRIM(UNNEST(STRING_TO_ARRAY(listed_in, ','))) AS genre
+	FROM netflix
+) AS table_1
+WHERE 
+	show_type = 'Movie'
+	AND
+	genre = 'Documentaries'
+GROUP BY year_added
+
+```
+
+> **Objective:** Analyze yearly trends in documentary releases to identify content growth patterns. 
+
+
+### 3. Count the number of titles under each genre.
+
+```sql
 SELECT 
-    type,
-    rating AS most_frequent_rating
-FROM RankedRatings
-WHERE rank = 1;
-```
-
-> **Objective:** Identify the most frequently occurring rating for each type of content.  
-
-
-### 3. Find all titles where the description contains the word “love”.
-
-```sql
-SELECT * 
+	TRIM(UNNEST(STRING_TO_ARRAY(listed_in, ','))) AS genre,
+	COUNT(show_id) AS num_of_content
 FROM netflix
-WHERE release_year = 2020;
+GROUP BY 1
+ORDER BY 2 DESC
 ```
 
-> **Objective:** Retrieve all movies released in a specific year.
+> **Objective:** Understand genre popularity by counting titles in each category.
 
 
-### 4. Find the oldest title(s) available by release year.
+### 4. Find the most common rating for movies and TV shows.
 
 ```sql
-SELECT * 
+SELECT 
+	show_type, 
+	no_of_times_rating_given, 
+	rating 
 FROM
 (
-    SELECT 
-        UNNEST(STRING_TO_ARRAY(country, ',')) AS country,
-        COUNT(*) AS total_content
-    FROM netflix
-    GROUP BY 1
-) AS t1
-WHERE country IS NOT NULL
-ORDER BY total_content DESC
-LIMIT 5;
+SELECT
+	show_type,
+	rating,
+	COUNT(*) AS no_of_times_rating_given,
+	RANK() OVER(PARTITION BY show_type ORDER BY COUNT(*) DESC) AS ranking
+FROM netflix
+GROUP BY 1, 2
+) 
+AS table_1
+WHERE ranking = 1
 ```
 
-> **Objective:** Identify the top 5 countries with the highest number of content items.
+> **Objective:** Identify the prevalent content ratings to assess audience targeting.
 
-### 5. Count the number of titles under each genre.
+### 5. Identify top 10 countries producing the highest number of Netflix titles.
+
+```sql
+SELECT
+	TRIM(UNNEST(STRING_TO_ARRAY(country, ','))) AS all_countries,
+	COUNT(title) AS num_of_titles
+FROM netflix
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 10
+
+```
+
+> **Objective:** Highlight the most prolific content-producing countries on Netflix.
+
+### 6. Find top 10 directors with the highest number of titles.
+
+```sql
+SELECT
+	TRIM(UNNEST(STRING_TO_ARRAY(director, ','))) AS all_directors,
+	COUNT(title) AS num_of_titles
+FROM netflix
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 10
+```
+
+> **Objective:** Determine which directors contribute most to Netflix’s catalog.
+
+### 7. Find the top 10 actors who have appeared in the highest number of movies produced in India.
 
 ```sql
 SELECT 
-    *
+	TRIM(UNNEST(STRING_TO_ARRAY(casts, ','))) AS actors,
+	COUNT(show_id) AS num_of_movies
 FROM netflix
-WHERE type = 'Movie'
-ORDER BY SPLIT_PART(duration, ' ', 1)::INT DESC;
+WHERE country ~* '\mindia?\M' AND show_type = 'Movie'
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 10
 ```
 
-> **Objective:** Count the number of content items in each genre.
+> **Objective:** Identify the most featured actors in Indian Netflix movies.
 
-### 6. Find the most common rating for Movies and TV Shows.
+### 8. Identify the longest duration movie and the TV show with the most seasons.
 
 ```sql
-SELECT *
-FROM netflix
-WHERE TO_DATE(date_added, 'Month DD, YYYY') >= CURRENT_DATE - INTERVAL '5 years';
+WITH longest_movie AS
+(
+	SELECT 
+		show_type,
+		title,
+		duration
+	FROM netflix
+	WHERE show_type = 'Movie' AND duration_type = 'min'
+	ORDER BY duration_num DESC
+	LIMIT 1
+),
+ longest_tv_show AS
+(
+	SELECT 
+		show_type,
+		title,
+		duration
+	FROM netflix
+	WHERE show_type = 'Tv Show' AND duration_type = 'seasons'
+	ORDER BY duration_num DESC
+	LIMIT 1
+)
+SELECT * FROM longest_movie UNION ALL SELECT * FROM longest_tv_show
+
 ```
 
-> **Objective:** Retrieve content added to Netflix in the last 5 years.
+> **Objective:** Highlight extreme cases in content duration for movies and TV shows.
 
-### 7. Find All Movies/TV Shows by Director 'Rajiv Chilaka'
+### 9. Count titles contains words 'love', 'action', 'violence'.
 
 ```sql
-SELECT *
-FROM (
-    SELECT 
-        *,
-        UNNEST(STRING_TO_ARRAY(director, ',')) AS director_name
-    FROM netflix
-) AS t
-WHERE director_name = 'Rajiv Chilaka';
-```
-
-> **Objective:** List all content directed by 'Rajiv Chilaka'.
-
-### 8. Identify countries producing the highest number of Netflix titles
-
-```sql
-SELECT *
+SELECT	
+	COUNT(*) AS content_with_keywords 
 FROM netflix
-WHERE type = 'TV Show'
-  AND SPLIT_PART(duration, ' ', 1)::INT > 5;
+WHERE 
+	description ~* '\mlove\M' OR description ~* '\maction\M' OR description ~* 'violence'
+
 ```
 
-> **Objective:** Identify TV shows with more than 5 seasons.
-
-### 9. Find directors with the highest number of titles.
-
-```sql
-SELECT 
-    UNNEST(STRING_TO_ARRAY(listed_in, ',')) AS genre,
-    COUNT(*) AS total_content
-FROM netflix
-GROUP BY 1;
-```
-
-> **Objective:** Count the number of content items in each genre.
+> **Objective:** Analyze the prevalence of specific themes across Netflix titles.
 
 ### 10.Find each year and the average numbers of content release in India on netflix. 
 return top 5 year with highest avg content release!
 
 ```sql
-SELECT 
-    country,
-    release_year,
-    COUNT(show_id) AS total_release,
-    ROUND(
-        COUNT(show_id)::numeric /
-        (SELECT COUNT(show_id) FROM netflix WHERE country = 'India')::numeric * 100, 2
-    ) AS avg_release
+SELECT
+	year_added,
+	COUNT(*) AS content_added_per_year,
+	ROUND(COUNT(*)::NUMERIC/(SELECT COUNT(*) FROM netflix WHERE country ILIKE '%india%')::numeric * 100, 2) AS avg_content	
 FROM netflix
-WHERE country = 'India'
-GROUP BY country, release_year
-ORDER BY avg_release DESC
-LIMIT 5;
+WHERE country ~* '\mindia?\M'
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 5
 ```
 
-> **Objective:** Calculate and rank years by the average number of content releases by India.
+> **Objective:** Identify peak years for Netflix content addition in India.
 
-### 11. Identify the longest duration movie and the TV show with the most seasons.
+### 11. Distribution of release duration for movies and seasons for TV shows.
 
 ```sql
-SELECT * 
+SELECT show_type,  
+       COUNT(*) AS total_titles,
+       ROUND(AVG(duration_num), 2 ) AS avg_duration,
+	   duration_type,
+       MIN(duration_num) AS min_duration,
+       MAX(duration_num) AS max_duration
 FROM netflix
-WHERE listed_in LIKE '%Documentaries';
+WHERE duration_type IS NOT NULL
+GROUP BY show_type, duration_type;
 ```
 
-> **Objective:** Retrieve all movies classified as documentaries.
+> **Objective:** Explore content length patterns to understand audience engagement trends.
 
-### 12. Find All Content Without a Director
-
-```sql
-SELECT * 
-FROM netflix
-WHERE director IS NULL;
-```
-
-> **Objective:** List content that does not have a director.
-
-### 13. Find How Many Movies Actor 'Salman Khan' Appeared in the Last 10 Years
-
-```sql
-SELECT * 
-FROM netflix
-WHERE casts LIKE '%Salman Khan%'
-  AND release_year > EXTRACT(YEAR FROM CURRENT_DATE) - 10;
-```
-
-> **Objective:** Count the number of movies featuring 'Salman Khan' in the last 10 years.
-
-### 14. Find the Top 10 Actors Who Have Appeared in the Highest Number of Movies Produced in India
+### 12.(a) Count titles added on netflix per year (2015-2021).
 
 ```sql
 SELECT 
-    UNNEST(STRING_TO_ARRAY(casts, ',')) AS actor,
-    COUNT(*)
+	year_added,
+	COUNT(*) AS content_count
 FROM netflix
-WHERE country = 'India'
-GROUP BY actor
-ORDER BY COUNT(*) DESC
-LIMIT 10;
+WHERE year_added BETWEEN 2015 AND 2021
+GROUP BY 1
+ORDER BY 1
 ```
 
-> **Objective:** Identify the top 10 actors with the most appearances in Indian-produced movies.
+> **Objective:** Examine the yearly growth in Netflix content additions over time.
 
-### 15. Categorize content as “Bad” if the description contains keywords like “kill” or “violence” otherwise label as “Good” and count each group.
+### 12.(b) Compare growth of Movies vs TV Shows over time.
 
 ```sql
 SELECT 
-    category,
-    COUNT(*) AS content_count
-FROM (
+	year_added, 
+	show_type, 
+	COUNT(*) AS total_titles
+FROM netflix
+WHERE year_added >= 2010
+GROUP BY year_added, show_type
+ORDER BY year_added, show_type;
+```
+
+> **Objective:** Track and compare the growth trends of Movies and TV Shows separately.
+
+### 13. Root cause analysis: Investigate TV show surge post-2015.
+
+```sql
+SELECT 
+	TRIM(UNNEST(STRING_TO_ARRAY(country, ','))) AS All_countries,
+	count(*) as tv_show_count,
+	year_added
+FROM netflix
+WHERE 
+	show_type='Tv Show' AND year_added >= 2015
+GROUP BY 
+	year_added, 
+	All_countries
+ORDER BY 
+	year_added DESC, 
+	tv_show_count DESC;
+```
+
+> **Objective:** Identify factors contributing to the increase in TV shows after 2015.
+
+### 14. Categorize content based on keywords 'kill' and 'violence' in description. Label content as 'Bad' and all other as 'Good'. 
+Count how many items fall into each category.
+
+```sql
+WITH cat_table AS 
+(
+SELECT	
+	*,
+	CASE WHEN description ~* '\mkill(s|ed|ing|er|ers)?\M' OR description ILIKE '% violen%'
+		THEN 'Bad Content'
+		ELSE 'Good Content'
+		END AS content_category
+FROM netflix
+)
+SELECT content_category, COUNT(*) AS total_content
+FROM cat_table
+GROUP BY content_category
+
+```
+
+> **Objective:** Classify content to analyze the distribution of potentially violent vs general titles.
+
+### 15. Top 3 genres by top 5 countries – regional preference analysis.
+
+```sql
+WITH genre_split AS (
     SELECT 
-        CASE 
-            WHEN description ILIKE '%kill%' OR description ILIKE '%violence%' THEN 'Bad'
-            ELSE 'Good'
-        END AS category
+        TRIM(g) AS genre,
+        TRIM(c) AS country
     FROM netflix
-) AS categorized_content
-GROUP BY category;
+    CROSS JOIN UNNEST(STRING_TO_ARRAY(listed_in, ',')) g
+    CROSS JOIN UNNEST(STRING_TO_ARRAY(country, ',')) c
+    WHERE country IS NOT NULL 
+      AND TRIM(c) <> ''
+      AND TRIM(g) <> ''
+),
+country_totals AS (
+    SELECT 
+        country, 
+        COUNT(*) AS total_titles
+    FROM genre_split
+    GROUP BY country
+    ORDER BY total_titles DESC
+    LIMIT 5
+),
+genre_count AS (
+    SELECT 
+        gs.country, 
+        gs.genre, 
+        COUNT(*) AS genre_titles,
+        ROW_NUMBER() OVER (
+            PARTITION BY gs.country 
+            ORDER BY COUNT(*) DESC
+        ) AS rn
+    FROM genre_split gs
+    JOIN country_totals ct 
+      ON gs.country = ct.country
+    GROUP BY gs.country, gs.genre
+)
+SELECT gc.country, gc.genre, gc.genre_titles
+FROM genre_count gc
+JOIN country_totals ct ON gc.country = ct.country
+WHERE rn <= 3
+ORDER BY ct.total_titles DESC, gc.country, gc.genre_titles DESC;
 ```
 
-> **Objective:** Categorize content as 'Bad' if it contains 'kill' or 'violence' and 'Good' otherwise. Count the number of items in each category.
+> **Objective:** Determine regional genre preferences by analyzing top genres per country.
 
 ## Findings and Conclusion
 
-- **Content Distribution:** The dataset contains a diverse range of movies and TV shows with varying ratings and genres.
-- **Common Ratings:** Insights into the most common ratings provide an understanding of the content's target audience.
-- **Geographical Insights:** The top countries and the average content releases by India highlight regional content distribution.
-- **Content Categorization:** Categorizing content based on specific keywords helps in understanding the nature of content available on Netflix.
-
-This analysis provides a comprehensive view of Netflix's content and can help inform content strategy and decision-making.
-
+- **Content Distribution:** Analysis of Movies vs TV Shows, genres, and ratings reveals the diversity of Netflix’s catalog.
+- **Top Contributors:** Identifying leading directors, actors, and countries highlights where most content originates and who drives production.
+- **Trends Over Time:** Yearly content additions and growth comparisons between Movies and TV Shows show how Netflix expanded its library over time, with a notable surge in TV shows post-2015.
+- **Content Characteristics & Themes:** Examining duration, seasons, and keyword-based classification (“Good” vs “Bad”) provides insight into the nature and themes of the content.
+- **Regional Preferences:** Top genres by country reveal viewer preferences and regional content patterns.
+  
+This analysis provides a structured understanding of Netflix’s content library, offering actionable insights that can support content strategy, platform growth, and regional targeting. These insights are ready for further exploration and visualization using Google Sheets or Excel.
 
 
 ## Author - Aman Sharma
 
-This project is part of my portfolio, showcasing the SQL skills essential for data analyst roles. If you have any questions, feedback, or would like to collaborate, feel free to get in touch!
+This project is part of my portfolio and highlights the SQL skills that are essential for a data analyst role. If you have any questions, suggestions, or would like to collaborate, feel free to connect with me!
 
-### Stay Updated and Join the Community
+### Stay Updated and Connect with Me
 
-For more content on SQL, data analysis, and other data-related topics, make sure to follow me on Github and Linkedin:
+Discover more of my SQL and data analysis projects on GitHub, and connect with me on LinkedIn for professional updates:
 
-- **YouTube**: [Subscribe to my channel for tutorials and insights](https://www.youtube.com/@zero_analyst)
-- **Instagram**: [Follow me for daily tips and updates](https://www.instagram.com/zero_analyst/)
-- **LinkedIn**: [Connect with me professionally](https://www.linkedin.com/in/najirr)
-- **Discord**: [Join our community to learn and grow together](https://discord.gg/36h5f2Z5PK)
+- **LinkedIn**: [Connect with me professionally](https://www.linkedin.com/in/amansharma01prime/)
+- **GitHub**: [Explore my projects and code](https://github.com/AmanSharma01Prime)
 
 Thank you for your support, and I look forward to connecting with you!
