@@ -1,6 +1,6 @@
 # Netflix Content Analysis Using SQL, Python (Pandas/Colab), and Google Sheets
 
-<!-- ![netflix logo](https://github.com/AmanSharma01Prime/netflix-content-analysis/blob/main/netflix-logo-in-clouds-2.jpeg)  -->
+<!-- ![netflix logo]()  -->
 
 <p align="center">
   <img src="https://github.com/AmanSharma01Prime/netflix-content-analysis/blob/main/netflix_logo.jpeg" alt="Banner" width="600" height="350"/>
@@ -8,7 +8,17 @@
 
 
 ## Overview
-This project analyzes Netflix’s content catalog using SQL to extract business insights. It covers content trends, genre and country analysis, top contributors (directors/actors), and keyword-based thematic exploration. The goal is to showcase SQL skills relevant to data analyst roles while generating actionable insights from real-world data.
+
+This project provides an end-to-end analysis of Netflix’s content catalog. It combines **data cleaning and exploration in Python (Colab)**, **SQL-based analysis of business problems**, **visualizations in Google Sheets**, and **insights summarized in a document and Slides/PDF deck**.  
+
+The analysis covers:  
+- Content trends over time, including annual releases and documentary growth  
+- Genre distribution and country-wise preferences  
+- Ratings distribution and root cause analysis for movies and TV shows  
+- Keyword-based thematic exploration and top contributors (directors/actors)  
+
+The goal is to showcase **practical data analysis skills**, including data cleaning, SQL querying, visualization, and insight generation, while deriving actionable findings from a real-world dataset.
+
 
 ## Objectives
 
@@ -16,7 +26,53 @@ This project analyzes Netflix’s content catalog using SQL to extract business 
 - Identify trends in content additions and user-targeted characteristics (ratings, duration).
 - Highlight top-performing contributors (directors, actors).
 - Analyze content themes and regional preferences to support business decision-making.
-- Generate insights ready for visualization or further analysis in Google Sheets.
+- Summarize SQL results into actionable insights and visualizations.
+
+
+## 📊 Project Workflow
+
+1. Performed initial exploration in Colab to understand and clean the dataset.  
+2. Designed database schema (`Schema.sql`) and imported cleaned data into SQL.  
+3. Defined business problems (`business problems.sql`) and solved them (`business solutions.sql`).  
+4. Used SQL results to create charts in Google Sheets.  
+5. Summarized findings in an Insights Document and Visualization Deck (Slides/PDF).  
+
+
+## 📂 Files in This Repository
+
+- `Schema.sql` → Database schema creation.
+- `business problems.sql` → Defined business questions.
+- `business solutions.sql` → SQL queries with solutions.
+- `netflix_titles.csv` → Dataset used for analysis.
+- `netflix_dataset_cleaning.ipynb` → Exploratory Data Analysis (EDA) - colab notebook.
+- `netflix analysis slides.pdf` → Backup of visualization deck (all charts + short insights).
+- `Netflix Analysis - Insights Document.pdf` → Backup of insights document.
+- `README.md` → Project overview and documentation.
+
+### 🔗 External Links
+- [Google Sheets – Interactive Charts](https://docs.google.com/spreadsheets/d/1Q4iAqJ6-Evj9Q3JH97RpZt36Ohn8JRU3iEdFpcPUALI/edit?usp=sharing)
+- [Google Slides – Visualization Deck](https://docs.google.com/presentation/d/19UJPGIc3eAdQVVivCMvHYIavOQLJk-TzLGksyrZlmOA/edit?usp=sharing)
+- [Insights Document](https://docs.google.com/document/d/1RTb9ov4vMU_2TfvgzEyW-9y4QsYrhPwjOhxMMjYmkLA/edit?usp=sharing)
+  
+
+## 📊 Visualizations (Highlights)
+
+Here are a few key charts from the analysis. Full interactive charts are available in the [Google Sheets link](https://docs.google.com/spreadsheets/d/1Q4iAqJ6-Evj9Q3JH97RpZt36Ohn8JRU3iEdFpcPUALI/edit?usp=sharing), and a complete visual deck is in the [Slides/PDF backup](https://docs.google.com/presentation/d/19UJPGIc3eAdQVVivCMvHYIavOQLJk-TzLGksyrZlmOA/edit?usp=sharing).
+
+### Key Charts
+
+1. **Content Distribution**  
+   ![Content Distribution](content_distribution.png)  
+   *Pie chart showing total movies vs TV shows.*
+
+2. **Genre Distribution**  
+   ![Genre Distribution](genre_distribution.png)  
+   *Top genres across all titles.*
+
+3. **Regional Genre Preferences**  
+   ![Regional Genre Preferences](regional_genre_preferences.png)  
+   *Top 3 genres by top 5 countries.*
+
 
 ## Dataset
 
