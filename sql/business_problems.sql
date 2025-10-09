@@ -18,6 +18,7 @@
     B. Compare growth of Movies vs TV Shows over time
 13. Root cause analysis: Investigate TV show surge post-2015
 14. Categorize content based on keywords 'kill' and 'violence' in description. Label content as 'Bad' and all other 
-as 'Good'. Count how many items fall into each category.
+    as 'Good'. Count how many items fall into each category.
 15. Top 5 genres by country – regional preference analysis
+
 
