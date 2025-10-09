@@ -3,7 +3,7 @@
 <!-- ![netflix logo]()  -->
 
 <p align="center">
-  <img src="https://github.com/AmanSharma01Prime/netflix-content-analysis/blob/main/netflix_logo.jpeg" alt="Banner" width="600" height="350"/>
+  <img src="https://github.com/AmanSharma01Prime/netflix-content-analysis/blob/main/assets/netflix%20logo.jpeg" alt="Banner" width="600" height="350"/>
 </p>
 
 
@@ -40,14 +40,14 @@ The goal is to showcase **practical data analysis skills**, including data clean
 
 ## 📂 Files in This Repository
 
-- `Schema.sql` → Database schema creation.
-- `business problems.sql` → Defined business questions.
-- `business solutions.sql` → SQL queries with solutions.
-- `netflix_titles.csv` → Dataset used for analysis.
-- `netflix_dataset_cleaning.ipynb` → Exploratory Data Analysis (EDA) - colab notebook.
-- `netflix analysis slides.pdf` → Backup of visualization deck (all charts + short insights).
-- `Netflix Analysis - Insights Document.pdf` → Backup of insights document.
-- `README.md` → Project overview and documentation.
+- [Schema.sql](sql/Schema.sql) → Database schema creation.
+- [business problems.sql](sql/business_problems.sql) → Defined business questions.
+- [business solutions.sql](sql/business_solutions.sql) → SQL queries with solutions.
+- [netflix_titles.csv](data/netflix_titles.csv) → Dataset used for analysis.
+- [netflix_dataset_cleaning.ipynb](notebooks/netflix_dataset_cleaning.ipynb) → Exploratory Data Analysis (EDA) - colab notebook.
+- [netflix analysis slides.pdf](reports/netflix_analysis_slides.pdf) → Backup of visualization deck (all charts + short insights).
+- [Netflix Analysis - Insights Document.pdf](reports/Netflix_Analysis_Insights_Document.pdf) → Backup of insights document.
+- [README.md](README.md) → Project overview and documentation.
 
 ### 🔗 External Links
 - [Google Sheets – Interactive Charts](https://docs.google.com/spreadsheets/d/1Q4iAqJ6-Evj9Q3JH97RpZt36Ohn8JRU3iEdFpcPUALI/edit?usp=sharing)
@@ -57,20 +57,21 @@ The goal is to showcase **practical data analysis skills**, including data clean
 
 ## 📊 Visualizations (Highlights)
 
-Here are a few key charts from the analysis. Full interactive charts are available in the [Google Sheets link](https://docs.google.com/spreadsheets/d/1Q4iAqJ6-Evj9Q3JH97RpZt36Ohn8JRU3iEdFpcPUALI/edit?usp=sharing), and a complete visual deck is in the [Slides/PDF backup](https://docs.google.com/presentation/d/19UJPGIc3eAdQVVivCMvHYIavOQLJk-TzLGksyrZlmOA/edit?usp=sharing).
+Here are a few key charts from the analysis.  
+Full interactive charts are available in the [Google Sheets link](https://docs.google.com/spreadsheets/d/1Q4iAqJ6-Evj9Q3JH97RpZt36Ohn8JRU3iEdFpcPUALI/edit?usp=sharing), and a complete visual deck is in the [Google Slides link](https://docs.google.com/presentation/d/19UJPGIc3eAdQVVivCMvHYIavOQLJk-TzLGksyrZlmOA/edit?usp=sharing). (slides [pdf](reports/netflix_analysis_slides.pdf))
 
 ### Key Charts
 
 1. **Content Distribution**  
-   ![Content Distribution](content_distribution.png)  
+   ![Content Distribution](visualisations/content_distribution.png)  
    *Pie chart showing total movies vs TV shows.*
 
 2. **Genre Distribution**  
-   ![Genre Distribution](genre_distribution.png)  
+   ![Genre Distribution](visualisations/genre_distribution.png)  
    *Top genres across all titles.*
 
 3. **Regional Genre Preferences**  
-   ![Regional Genre Preferences](regional_genre_preferences.png)  
+   ![Regional Genre Preferences](visualisations/regional_genre_preferences.png)  
    *Top 3 genres by top 5 countries.*
 
 
@@ -427,13 +428,19 @@ This analysis provides a structured understanding of Netflix’s content library
 
 ## Author - Aman Sharma
 
-This project is part of my portfolio and highlights the SQL skills that are essential for a data analyst role. If you have any questions, suggestions, or would like to collaborate, feel free to connect with me!
+This project is part of my portfolio and primarily showcases SQL skills that are essential for a data analyst role.  
 
-### Stay Updated and Connect with Me
+Alongside SQL, it also demonstrates supporting steps such as *data exploration*, *visualization*, and *reporting of insights* - reflecting the   
+*end-to-end analysis* process.
 
-Discover more of my SQL and data analysis projects on GitHub, and connect with me on LinkedIn for professional updates:
+
+### Let’s Connect
+
+If you have any questions, feedback, or opportunities to collaborate, feel free to reach out:
 
 - **LinkedIn**: [Connect with me professionally](https://www.linkedin.com/in/amansharma01prime/)
 - **GitHub**: [Explore my projects and code](https://github.com/AmanSharma01Prime)
 
-Thank you for your support, and I look forward to connecting with you!
+If you found this project insightful, consider ⭐ starring the repo - it helps others discover it too.
+
+Thank you for visiting!
